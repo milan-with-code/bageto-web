@@ -11,73 +11,8 @@ import { Star, Heart, Share2, Truck, Shield, RotateCcw, Plus, Minus, ZoomIn } fr
 import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
-
-// Mock product data - in a real app, this would come from an API
-const product = {
-  id: 1,
-  name: "Executive Leather Briefcase",
-  price: 299,
-  originalPrice: 399,
-  images: [
-    "/placeholder.svg?height=600&width=600&text=Briefcase+Front",
-    "/placeholder.svg?height=600&width=600&text=Briefcase+Side",
-    "/placeholder.svg?height=600&width=600&text=Briefcase+Interior",
-    "/placeholder.svg?height=600&width=600&text=Briefcase+Detail"
-  ],
-  category: "bags",
-  description: "This executive leather briefcase is crafted from premium Italian leather and features a sophisticated design perfect for the modern professional. With multiple compartments and a padded laptop section, it combines style with functionality.",
-  features: [
-    "Premium Italian leather construction",
-    "Padded laptop compartment fits up to 15-inch laptops",
-    "Multiple interior pockets for organization",
-    "Solid brass hardware",
-    "Adjustable shoulder strap included",
-    "Lifetime warranty"
-  ],
-  specifications: {
-    dimensions: "16\" x 12\" x 4\"",
-    weight: "3.2 lbs",
-    material: "Full-grain Italian leather",
-    lining: "Cotton canvas",
-    hardware: "Solid brass",
-    closure: "Dual zipper"
-  },
-  rating: 4.8,
-  reviews: 124,
-  inStock: true,
-  colors: ["Brown", "Black", "Tan"],
-  sizes: ["Standard"]
-}
-
-const reviews = [
-  {
-    id: 1,
-    name: "John Smith",
-    rating: 5,
-    date: "2024-01-15",
-    title: "Excellent quality and craftsmanship",
-    comment: "This briefcase exceeded my expectations. The leather is beautiful and the construction is top-notch. Perfect for daily use.",
-    verified: true
-  },
-  {
-    id: 2,
-    name: "Sarah Johnson",
-    rating: 5,
-    date: "2024-01-10",
-    title: "Perfect for business travel",
-    comment: "Love the organization and the professional look. Gets compliments everywhere I go. Worth every penny.",
-    verified: true
-  },
-  {
-    id: 3,
-    name: "Michael Chen",
-    rating: 4,
-    date: "2024-01-05",
-    title: "Great briefcase, minor issue with strap",
-    comment: "Overall fantastic product. The only minor issue is the shoulder strap could be a bit more comfortable for long carries.",
-    verified: true
-  }
-]
+import { useFavorites } from "@/contexts/favorites-context"
+import { product, reviews } from "@/mocks/api/products"
 
 export default function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0)
@@ -86,6 +21,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1)
   const [isZoomed, setIsZoomed] = useState(false)
   const { addItem } = useCart()
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites()
 
   const handleAddToCart = () => {
     addItem({
@@ -102,6 +38,21 @@ export default function ProductDetailPage() {
 
   const incrementQuantity = () => setQuantity(prev => prev + 1)
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1))
+
+
+  const handleToggleFavorite = (product: any) => {
+    if (isFavorite(product.id)) {
+      removeFromFavorites(product.id)
+    } else {
+      addToFavorites({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.images[0],
+        category: product.category,
+      })
+    }
+  }
 
   return (
     <div className="min-h-screen bg-cream-50 pt-20">
@@ -310,8 +261,9 @@ export default function ProductDetailPage() {
                 >
                   {product.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
-                <Button variant="outline" size="icon" className="p-3">
+                <Button onClick={() => handleToggleFavorite(product)} variant="outline" size="icon" className="p-3">
                   <Heart className="h-5 w-5" />
+
                 </Button>
                 <Button variant="outline" size="icon" className="p-3">
                   <Share2 className="h-5 w-5" />

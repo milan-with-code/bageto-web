@@ -64,13 +64,13 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) return
 
     try {
       await register(formData.email, formData.password, formData.name)
       router.push("/")
-    } catch (error) {
+    } catch {
       setErrors({ general: "Registration failed. Please try again." })
     }
   }

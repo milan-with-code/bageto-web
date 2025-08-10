@@ -41,13 +41,13 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) return
 
     try {
       await login(email, password)
       router.push("/")
-    } catch (error) {
+    } catch {
       setErrors({ general: "Invalid email or password" })
     }
   }

@@ -1,0 +1,68 @@
+export interface Product {
+    id: number;
+    name: string;
+    price: number;
+    originalPrice?: number;
+    images: string[];
+    category: string;
+    description: string;
+    features: string[];
+    specifications: ProductSpecification;
+    rating: number;
+    reviews: number;
+    inStock: boolean;
+    colors: string[];
+    sizes: string[];
+}
+
+export interface ProductReview {
+    id: number;
+    name: string;
+    rating: number;
+    date: string;
+    title: string;
+    comment: string;
+    verified: boolean;
+}
+
+export type ProductsTypes = {
+    id: number;
+    name: string;
+    price: number;
+    image: string;
+    category: string,
+    description: string,
+    rating: number,
+    reviews: number
+
+}
+
+export interface ProductSpecification {
+    dimensions: string;
+    weight: string;
+    material: string;
+    lining: string;
+    hardware: string;
+    closure: string;
+}
+
+export type Category = "all" | "bags" | "wallets" | "belts" | "jackets" | "accessories";
+
+export interface SortOption {
+    value: "featured" | "price-low" | "price-high" | "rating" | "newest";
+    label: string;
+}
+
+export type ProductItem = {
+    id: number;
+    name: string;
+    price: number;
+    originalPrice?: number;
+    image: string;
+    category: string;
+    isNew?: boolean;
+    isBestseller?: boolean;
+    rating: number;
+    badge?: string;
+    reviews: number;
+};
