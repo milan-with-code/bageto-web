@@ -71,15 +71,15 @@ export default function Footer() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-gray-300">
                   <MapPin className="h-4 w-4 text-leather-gold" />
-                  <span className="text-sm">123 Craft Street, Artisan City, AC 12345</span>
+                  <span className="text-sm">1102, Axar Heights, Aksharwadi, Dabholi Circle, Ved Road, Katargam, Surat - 395004</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Phone className="h-4 w-4 text-leather-gold" />
-                  <span className="text-sm">+1 (555) 123-4567</span>
+                  <span className="text-sm">+91 (820) 034-9568</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Mail className="h-4 w-4 text-leather-gold" />
-                  <span className="text-sm">hello@artisanleather.com</span>
+                  <span className="text-sm">bagetobag603@gmail.com</span>
                 </div>
               </div>
             </motion.div>

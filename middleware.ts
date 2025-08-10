@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const protectedRoutes = ["/", "/about", "/products", "/contact", "/favorites"];
-const publicRoutes = ["/auth/login", "/auth/register"];
+const publicRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"];
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -11,9 +11,9 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const isProtected = protectedRoutes.some((route) =>
-        pathname.startsWith(route)
-    );
+    const isProtected =
+        pathname === "/" ||
+        protectedRoutes.some((route) => route !== "/" && pathname.startsWith(route));
 
     const token = request.cookies.get("token")?.value;
 

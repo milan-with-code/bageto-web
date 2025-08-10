@@ -10,39 +10,12 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Search, X, Clock, TrendingUp } from "lucide-react"
 import Image from "next/image"
+import { quickResults, recentSearches, trendingSearches } from "@/mocks/api/search"
 
 interface SearchModalProps {
     isOpen: boolean
     onClose: () => void
 }
-
-// Mock recent searches and trending searches
-const recentSearches = ["leather wallet", "briefcase", "vintage bag"]
-const trendingSearches = ["executive briefcase", "minimalist wallet", "leather jacket", "travel duffel"]
-const quickResults = [
-    {
-        id: 1,
-        name: "Executive Leather Briefcase",
-        price: 299,
-        image: "/placeholder.svg?height=60&width=60&text=Briefcase",
-        category: "bags",
-    },
-    {
-        id: 2,
-        name: "Premium Leather Wallet",
-        price: 89,
-        image: "/placeholder.svg?height=60&width=60&text=Wallet",
-        category: "wallets",
-    },
-    {
-        id: 3,
-        name: "Classic Leather Belt",
-        price: 59,
-        image: "/placeholder.svg?height=60&width=60&text=Belt",
-        category: "belts",
-    },
-]
-
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const [searchQuery, setSearchQuery] = useState("")
     const [showResults, setShowResults] = useState(false)
