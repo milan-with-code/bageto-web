@@ -14,12 +14,9 @@ import { ArrowLeft, CreditCard, Truck, Shield, Check } from 'lucide-react'
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
 import { useRouter } from "next/navigation"
+import { steps } from "@/mocks/api/cart"
 
-const steps = [
-  { id: 1, name: "Shipping", description: "Delivery information" },
-  { id: 2, name: "Payment", description: "Payment details" },
-  { id: 3, name: "Review", description: "Order confirmation" }
-]
+
 
 export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -120,11 +117,10 @@ export default function CheckoutPage() {
           <div className="flex items-center justify-center mb-8">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
-                  currentStep >= step.id 
-                    ? "bg-amber-700 border-amber-700 text-white" 
-                    : "border-stone-300 text-stone-500"
-                }`}>
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${currentStep >= step.id
+                  ? "bg-amber-700 border-amber-700 text-white"
+                  : "border-stone-300 text-stone-500"
+                  }`}>
                   {currentStep > step.id ? (
                     <Check className="h-5 w-5" />
                   ) : (
@@ -132,17 +128,15 @@ export default function CheckoutPage() {
                   )}
                 </div>
                 <div className="ml-3 text-left">
-                  <p className={`text-sm font-medium ${
-                    currentStep >= step.id ? "text-amber-700" : "text-stone-500"
-                  }`}>
+                  <p className={`text-sm font-medium ${currentStep >= step.id ? "text-amber-700" : "text-stone-500"
+                    }`}>
                     {step.name}
                   </p>
                   <p className="text-xs text-stone-400">{step.description}</p>
                 </div>
                 {index < steps.length - 1 && (
-                  <div className={`w-16 h-0.5 mx-4 ${
-                    currentStep > step.id ? "bg-amber-700" : "bg-stone-300"
-                  }`} />
+                  <div className={`w-16 h-0.5 mx-4 ${currentStep > step.id ? "bg-amber-700" : "bg-stone-300"
+                    }`} />
                 )}
               </div>
             ))}

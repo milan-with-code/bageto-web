@@ -14,81 +14,25 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/contexts/cart-context";
-
-const products = [
-  {
-    id: 1,
-    name: "Executive Briefcase",
-    price: 299,
-    originalPrice: 399,
-    image: "/placeholder.svg?height=400&width=400&text=Executive+Briefcase",
-    category: "Bags",
-    isNew: true,
-    rating: 4.9,
-    badge: "Best Seller",
-    reviews: 124,
-  },
-  {
-    id: 2,
-    name: "Minimalist Wallet",
-    price: 89,
-    image: "/placeholder.svg?height=400&width=400&text=Minimalist+Wallet",
-    category: "Wallets",
-    isBestseller: true,
-    rating: 4.8,
-    badge: "Best Seller",
-    reviews: 124,
-  },
-  {
-    id: 3,
-    name: "Vintage Backpack",
-    price: 199,
-    image: "/placeholder.svg?height=400&width=400&text=Vintage+Backpack",
-    category: "Bags",
-    rating: 4.7,
-    badge: "Best Seller",
-    reviews: 124,
-  },
-  {
-    id: 4,
-    name: "Classic Belt",
-    price: 59,
-    image: "/placeholder.svg?height=400&width=400&text=Classic+Belt",
-    category: "Accessories",
-    rating: 4.6,
-    badge: "Best Seller",
-    reviews: 124,
-  },
-  {
-    id: 5,
-    name: "Travel Duffel",
-    price: 249,
-    image: "/placeholder.svg?height=400&width=400&text=Travel+Duffel",
-    category: "Bags",
-    isNew: true,
-    rating: 4.8,
-    badge: "Best Seller",
-    reviews: 124,
-  },
-];
+import { productList } from "@/mocks/api/products";
 
 export default function ProductShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { addItem } = useCart();
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % Math.max(1, products.length - 2));
+    setCurrentIndex((prev) => (prev + 1) % Math.max(1, productList.length - 2));
   };
 
   const prevSlide = () => {
     setCurrentIndex(
       (prev) =>
-        (prev - 1 + Math.max(1, products.length - 2)) %
-        Math.max(1, products.length - 2)
+        (prev - 1 + Math.max(1, productList.length - 2)) %
+        Math.max(1, productList.length - 2)
     );
   };
 
-  const handleAddToCart = (product: (typeof products)[0]) => {
+  const handleAddToCart = (product: (typeof productList)[0]) => {
     addItem({
       id: product.id,
       name: product.name,
@@ -136,7 +80,7 @@ export default function ProductShowcase() {
           </motion.div>
 
           <div className="flex space-x-2">
-            {Array.from({ length: Math.max(1, products.length - 2) }).map(
+            {Array.from({ length: Math.max(1, productList.length - 2) }).map(
               (_, index) => (
                 <button
                   key={index}
@@ -167,7 +111,7 @@ export default function ProductShowcase() {
             animate={{ x: -currentIndex * 400 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {products.map((product, index) => (
+            {productList.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 50 }}
@@ -178,7 +122,7 @@ export default function ProductShowcase() {
               >
                 <div
                   key={`overlay-${product.id}`}
-                  className="group relative bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer"
+                  className="group relative bg-white rounded-2xl  overflow-hidden cursor-pointer"
                 >
                   <div className="relative overflow-hidden">
                     <Image

@@ -6,7 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { ShoppingBag, Menu, Search, Heart, User } from 'lucide-react'
 import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
@@ -102,7 +102,7 @@ export default function Navigation() {
 
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <Link href="/favorites">
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" className="relative">
                     <Heart className="h-5 w-5" />
                     {favorites.length > 0 && (
                       <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-red-600 text-white text-xs">
@@ -153,6 +153,7 @@ export default function Navigation() {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px]">
+                  <SheetTitle className="hidden"></SheetTitle>
                   <div className="flex flex-col space-y-6 mt-8">
                     <Link href="/" className="flex items-center space-x-2">
                       <div className="w-8 h-8 bg-gradient-to-br from-leather-gold to-leather-brown rounded-lg flex items-center justify-center">

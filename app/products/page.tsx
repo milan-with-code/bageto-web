@@ -11,108 +11,7 @@ import { Search, Grid, List } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
-
-const products = [
-  {
-    id: 1,
-    name: "Executive Leather Briefcase",
-    price: 299,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Briefcase",
-    category: "bags",
-    description: "Professional briefcase crafted from premium Italian leather",
-    rating: 4.8,
-    reviews: 124
-  },
-  {
-    id: 2,
-    name: "Premium Leather Wallet",
-    price: 89,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Wallet",
-    category: "wallets",
-    description: "Slim profile wallet with RFID protection",
-    rating: 4.9,
-    reviews: 89
-  },
-  {
-    id: 3,
-    name: "Classic Leather Belt",
-    price: 59,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Belt",
-    category: "belts",
-    description: "Timeless design with solid brass buckle",
-    rating: 4.7,
-    reviews: 156
-  },
-  {
-    id: 4,
-    name: "Vintage Leather Backpack",
-    price: 199,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Backpack",
-    category: "bags",
-    description: "Spacious backpack perfect for daily commute",
-    rating: 4.6,
-    reviews: 78
-  },
-  {
-    id: 5,
-    name: "Luxury Card Holder",
-    price: 45,
-    image: "/placeholder.svg?height=400&width=400&text=Card+Holder",
-    category: "wallets",
-    description: "Minimalist card holder for the modern professional",
-    rating: 4.8,
-    reviews: 92
-  },
-  {
-    id: 6,
-    name: "Designer Leather Jacket",
-    price: 399,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Jacket",
-    category: "jackets",
-    description: "Classic motorcycle jacket with modern styling",
-    rating: 4.9,
-    reviews: 67
-  },
-  {
-    id: 7,
-    name: "Travel Leather Duffel",
-    price: 249,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Duffel",
-    category: "bags",
-    description: "Weekend travel bag with vintage appeal",
-    rating: 4.7,
-    reviews: 43
-  },
-  {
-    id: 8,
-    name: "Leather Phone Case",
-    price: 29,
-    image: "/placeholder.svg?height=400&width=400&text=Phone+Case",
-    category: "accessories",
-    description: "Protective case with card slots",
-    rating: 4.5,
-    reviews: 201
-  },
-  {
-    id: 9,
-    name: "Handcrafted Leather Gloves",
-    price: 79,
-    image: "/placeholder.svg?height=400&width=400&text=Leather+Gloves",
-    category: "accessories",
-    description: "Warm and stylish winter gloves",
-    rating: 4.6,
-    reviews: 134
-  }
-]
-
-const categories = ["all", "bags", "wallets", "belts", "jackets", "accessories"]
-const sortOptions = [
-  { value: "featured", label: "Featured" },
-  { value: "price-low", label: "Price: Low to High" },
-  { value: "price-high", label: "Price: High to Low" },
-  { value: "rating", label: "Highest Rated" },
-  { value: "newest", label: "Newest" }
-]
+import { categories, products, sortOptions } from "@/mocks/api/products"
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
@@ -189,31 +88,34 @@ export default function ProductsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-lg shadow-sm p-6 mb-8"
+          className="bg-white rounded-lg shadow-sm py-0-4 sm:py-6 mb-8"
         >
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+          <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
             {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-stone-400 h-4 w-4" />
+            <div className="relative w-full sm:flex-1 sm:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 h-4 w-4" />
               <Input
                 type="text"
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 w-full"
               />
             </div>
 
-            <div className="flex items-center gap-4">
-              {/* Category Filter */}
+            {/* Filters & View Modes */}
+            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto sm:justify-end">
+              {/* Category */}
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
                     <SelectItem key={category} value={category}>
-                      {category === "all" ? "All Categories" : category.charAt(0).toUpperCase() + category.slice(1)}
+                      {category === "all"
+                        ? "All Categories"
+                        : category.charAt(0).toUpperCase() + category.slice(1)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -221,7 +123,7 @@ export default function ProductsPage() {
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-48">
+                <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -233,13 +135,13 @@ export default function ProductsPage() {
                 </SelectContent>
               </Select>
 
-              {/* View Mode */}
-              <div className="flex border rounded-lg">
+              {/* View mode buttons */}
+              <div className="flex border rounded-lg w-full sm:w-auto">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("grid")}
-                  className="rounded-r-none"
+                  className="flex-1 sm:flex-none rounded-r-none"
                 >
                   <Grid className="h-4 w-4" />
                 </Button>
@@ -247,7 +149,7 @@ export default function ProductsPage() {
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  className="rounded-l-none"
+                  className="flex-1 sm:flex-none rounded-l-none"
                 >
                   <List className="h-4 w-4" />
                 </Button>
@@ -255,6 +157,7 @@ export default function ProductsPage() {
             </div>
           </div>
         </motion.div>
+
 
         {/* Results Count */}
         <motion.div

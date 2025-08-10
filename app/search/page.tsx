@@ -13,6 +13,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
+import { categories, sortOptions } from "@/mocks/api/products"
 
 // Mock products data (in a real app, this would come from an API)
 const allProducts = [
@@ -107,14 +108,6 @@ const allProducts = [
     },
 ]
 
-const categories = ["all", "bags", "wallets", "belts", "jackets", "accessories"]
-const sortOptions = [
-    { value: "relevance", label: "Most Relevant" },
-    { value: "price-low", label: "Price: Low to High" },
-    { value: "price-high", label: "Price: High to Low" },
-    { value: "rating", label: "Highest Rated" },
-    { value: "newest", label: "Newest" },
-]
 
 export default function SearchPage() {
     const searchParams = useSearchParams()

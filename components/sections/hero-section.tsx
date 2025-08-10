@@ -8,7 +8,7 @@ import Link from "next/link"
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden ">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -34,7 +34,7 @@ export default function HeroSection() {
       />
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4">
+      <div className="relative z-10 container mx-auto px-4 mt-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
