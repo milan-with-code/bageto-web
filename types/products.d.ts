@@ -15,6 +15,19 @@ export interface Product {
     sizes: string[];
 }
 
+export interface AllProduct {
+    id: number;
+    name: string;
+    price: number;
+    originalPrice?: number;
+    image: string;
+    category: string;
+    description: string;
+    rating: number;
+    reviews: number;
+    tags: string[];
+}
+
 export interface ProductReview {
     id: number;
     name: string;

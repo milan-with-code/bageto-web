@@ -1,4 +1,4 @@
-import { Category, Product, ProductItem, ProductReview, ProductsTypes, SortOption } from "@/types/products";
+import { AllProduct, Category, Product, ProductItem, ProductReview, ProductsTypes, SortOption } from "@/types/products";
 
 export const products: ProductsTypes[] = [
     {
@@ -180,7 +180,6 @@ export const sortOptions: SortOption[] = [
     { value: "newest", label: "Newest" },
 ];
 
-
 export const productList: ProductItem[] = [
     {
         id: 1,
@@ -235,5 +234,97 @@ export const productList: ProductItem[] = [
         rating: 4.8,
         badge: "Best Seller",
         reviews: 124,
+    },
+];
+
+export const allProducts: AllProduct[] = [
+    {
+        id: 1,
+        name: "Executive Leather Briefcase",
+        price: 299,
+        originalPrice: 399,
+        image: "/placeholder.svg?height=400&width=400&text=Leather+Briefcase",
+        category: "bags",
+        description: "Professional briefcase crafted from premium Italian leather",
+        rating: 4.8,
+        reviews: 124,
+        tags: ["briefcase", "executive", "professional", "italian", "leather"],
+    },
+    {
+        id: 2,
+        name: "Premium Leather Wallet",
+        price: 89,
+        image: "/placeholder.svg?height=400&width=400&text=Leather+Wallet",
+        category: "wallets",
+        description: "Slim profile wallet with RFID protection",
+        rating: 4.9,
+        reviews: 89,
+        tags: ["wallet", "slim", "rfid", "premium", "leather"],
+    },
+    {
+        id: 3,
+        name: "Classic Leather Belt",
+        price: 59,
+        image: "/placeholder.svg?height=400&width=400&text=Leather+Belt",
+        category: "belts",
+        description: "Timeless design with solid brass buckle",
+        rating: 4.7,
+        reviews: 156,
+        tags: ["belt", "classic", "brass", "buckle", "timeless"],
+    },
+    {
+        id: 4,
+        name: "Vintage Leather Backpack",
+        price: 199,
+        image: "/placeholder.svg?height=400&width=400&text=Leather+Backpack",
+        category: "bags",
+        description: "Spacious backpack perfect for daily commute",
+        rating: 4.6,
+        reviews: 78,
+        tags: ["backpack", "vintage", "spacious", "commute", "daily"],
+    },
+    {
+        id: 5,
+        name: "Luxury Card Holder",
+        price: 45,
+        image: "/placeholder.svg?height=400&width=400&text=Card+Holder",
+        category: "wallets",
+        description: "Minimalist card holder for the modern professional",
+        rating: 4.8,
+        reviews: 92,
+        tags: ["card", "holder", "minimalist", "modern", "professional"],
+    },
+    {
+        id: 6,
+        name: "Designer Leather Jacket",
+        price: 399,
+        image: "/placeholder.svg?height=400&width=400&text=Leather+Jacket",
+        category: "jackets",
+        description: "Classic motorcycle jacket with modern styling",
+        rating: 4.9,
+        reviews: 67,
+        tags: ["jacket", "designer", "motorcycle", "classic", "modern"],
+    },
+    {
+        id: 7,
+        name: "Travel Leather Duffel",
+        price: 249,
+        image: "/placeholder.svg?height=400&width=400&text=Leather+Duffel",
+        category: "bags",
+        description: "Weekend travel bag with vintage appeal",
+        rating: 4.7,
+        reviews: 43,
+        tags: ["duffel", "travel", "weekend", "vintage", "bag"],
+    },
+    {
+        id: 8,
+        name: "Leather Phone Case",
+        price: 29,
+        image: "/placeholder.svg?height=400&width=400&text=Phone+Case",
+        category: "accessories",
+        description: "Protective case with card slots",
+        rating: 4.5,
+        reviews: 201,
+        tags: ["phone", "case", "protective", "cards", "slots"],
     },
 ];

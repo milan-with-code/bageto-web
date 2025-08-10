@@ -27,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
-      
+
       // Mock successful login
       setUser({
         id: "1",
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000))
-      
+
       // Mock successful registration
       setUser({
         id: "1",
