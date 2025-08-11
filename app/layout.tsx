@@ -1,13 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display } from 'next/font/google'
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import { CartProvider } from "@/contexts/cart-context"
-import { Toaster } from "@/components/ui/toaster"
-import Navigation from "@/components/navigation"
-import Footer from "@/components/footer"
-import { AuthProvider } from "@/contexts/auth-context"
-import { FavoritesProvider } from "@/contexts/favorites-context"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,28 +23,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
-          <AuthProvider>
-            <FavoritesProvider>
-              <CartProvider>
-                <Navigation />
-                <main className="min-h-screen">
-                  {children}
-                </main>
-                <Footer />
-                <Toaster />
-              </CartProvider>
-            </FavoritesProvider>
-          </AuthProvider>
-        </ThemeProvider>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased min-h-screen`}>
+        {children}
       </body>
     </html>
   )
