@@ -9,16 +9,16 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import Link from "next/link"
-import { useAuth } from "@/contexts/auth-context"
-import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({})
-  const { login, isLoading } = useAuth()
-  const router = useRouter()
+  const { loginUser, loading } = useAuthStore()
+
+
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {}
@@ -45,8 +45,9 @@ export default function LoginPage() {
     if (!validateForm()) return
 
     try {
-      await login(email, password)
-      router.push("/")
+      await loginUser({
+        email, password
+      })
     } catch {
       setErrors({ general: "Invalid email or password" })
     }
@@ -145,10 +146,10 @@ export default function LoginPage() {
             <motion.div whileTap={{ scale: 0.98 }}>
               <Button
                 type="submit"
-                disabled={isLoading}
+                isLoading={loading}
                 className="w-full bg-amber-700 hover:bg-amber-800 text-white py-3"
               >
-                {isLoading ? "Signing in..." : "Sign In"}
+                Sign In
               </Button>
             </motion.div>
 

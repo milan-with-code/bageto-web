@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter, Playfair_Display } from 'next/font/google'
 import "./globals.css"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,12 +25,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
 
-
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased min-h-screen`}>
         {children}
+        <Toaster />
       </body>
     </html>
   )
