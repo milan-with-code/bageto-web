@@ -9,16 +9,16 @@ import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import Link from "next/link"
-import { useAuthStore } from "@/store/useAuthStore"
+import { useAuth } from "@/contexts/auth-context"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({})
-  const { loginUser, loading } = useAuthStore()
-
-
+  const { isLoading, login, } = useAuth()
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {}
@@ -41,16 +41,9 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!validateForm()) return
-
-    try {
-      await loginUser({
-        email, password
-      })
-    } catch {
-      setErrors({ general: "Invalid email or password" })
-    }
+    await login(email, password)
+    router.push("/");
   }
 
   return (
@@ -146,7 +139,7 @@ export default function LoginPage() {
             <motion.div whileTap={{ scale: 0.98 }}>
               <Button
                 type="submit"
-                isLoading={loading}
+                isLoading={isLoading}
                 className="w-full bg-amber-700 hover:bg-amber-800 text-white py-3"
               >
                 Sign In
