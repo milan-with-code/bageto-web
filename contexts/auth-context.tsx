@@ -1,9 +1,9 @@
 "use client"
 
-import { createContext, useContext, useState, ReactNode } from "react"
+import { useAuthStore } from "@/store/useAuthStore"
+import { createContext, useContext, useState, ReactNode, useEffect } from "react"
 
 interface User {
-  id: string
   email: string
   name: string
 }
@@ -20,44 +20,21 @@ const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const { loginUser, loading, fetchUser, } = useAuthStore()
+
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser]);
 
   const login = async (email: string, password: string) => {
-    setIsLoading(true)
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
-      // Mock successful login
-      setUser({
-        id: "1",
-        email,
-        name: email.split("@")[0],
-      })
-    } catch (error) {
-      throw new Error("Login failed")
-    } finally {
-      setIsLoading(false)
-    }
+    await loginUser({
+      email,
+      password
+    })
   }
 
   const register = async (email: string, password: string, name: string) => {
-    setIsLoading(true)
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
-      // Mock successful registration
-      setUser({
-        id: "1",
-        email,
-        name,
-      })
-    } catch (error) {
-      throw new Error("Registration failed")
-    } finally {
-      setIsLoading(false)
-    }
+    console.log('email,password :>> ', email, password);
   }
 
   const logout = () => {
@@ -65,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isLoading: loading }}>
       {children}
     </AuthContext.Provider>
   )
