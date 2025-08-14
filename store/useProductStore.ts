@@ -17,6 +17,8 @@ interface ProductState {
     editProduct: (id: number, updatedData: Partial<Product>) => Promise<void>;
 }
 
+const URL = process.env.NEXT_PUBLIC_BACKEND_URL
+
 export const useProductStore = create<ProductState>((set, get) => ({
     product: [],
     loading: false,
@@ -25,7 +27,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     fetchProducts: async () => {
         set({ loading: true, error: null })
         try {
-            const res = await fetch('https://dummyjson.com/products');
+            const res = await fetch(`${URL}/api/product`);
             const data = await res.json();
             set({
                 product: data?.products
@@ -39,7 +41,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     fetchProductDetails: async (id) => {
         set({ error: null, loading: true });
         try {
-            const res = await fetch(`https://dummyjson.com/products/${id}`)
+            const res = await fetch(`${URL}/api/product/${id}`)
             const data = await res.json();
             set({ product: [data], loading: false })
         } catch (error: any) {
@@ -49,7 +51,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
 
     deleteProduct: async (id) => {
         try {
-            await fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+            await fetch(`${URL}/api/products/${id}`, {
                 method: "DELETE",
             });
 
@@ -66,7 +68,7 @@ export const useProductStore = create<ProductState>((set, get) => ({
     editProduct: async (id, updatedData: Partial<Product>) => {
         set({ loading: true, error: null });
         try {
-            const res = await fetch("", {
+            const res = await fetch(`${URL}/api/product/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
