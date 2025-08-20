@@ -9,15 +9,26 @@ import { Plus, Minus, Trash2, ShoppingBag, ArrowLeft } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
+import { useCartStore } from "@/store/useCartStore"
+import { useEffect } from "react"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function CartPage() {
+  const { user } = useAuth()
   const { items, total, updateQuantity, removeItem, clearCart } = useCart()
+  const { fetchCartItems, cart, removeFromCart } = useCartStore();
+
+  useEffect(() => {
+    if (user?._id) {
+      fetchCartItems(user._id)
+    }
+  }, [fetchCartItems, user?._id])
 
   const shipping = total > 200 ? 0 : 15
   const tax = total * 0.08
   const finalTotal = total + shipping + tax
 
-  if (items.length === 0) {
+  if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-cream-50 pt-20">
         <div className="max-w-4xl mx-auto px-4 py-16">
@@ -66,16 +77,15 @@ export default function CartPage() {
             </h1>
           </div>
           <p className="text-stone-600">
-            {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
+            {cart.length} {cart.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item, index) => (
+            {cart.map((item, index) => (
               <motion.div
-                key={`${item.id}-${item.color}-${item.size}`}
+                key={`${item.productId}-${item.color}-${item.size}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -123,7 +133,7 @@ export default function CartPage() {
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                  onClick={() => updateQuantity(item.productId, item.quantity - 1)}
                                   disabled={item.quantity <= 1}
                                   className="h-8 w-8"
                                 >
@@ -137,7 +147,7 @@ export default function CartPage() {
                                 <Button
                                   variant="outline"
                                   size="icon"
-                                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                  onClick={() => updateQuantity(item.productId, item.quantity + 1)}
                                   className="h-8 w-8"
                                 >
                                   <Plus className="h-3 w-3" />
@@ -154,7 +164,7 @@ export default function CartPage() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => removeItem(item.id)}
+                                onClick={() => removeFromCart(item?.productId)}
                                 className="text-red-600 hover:text-red-700 hover:bg-red-50"
                               >
                                 <Trash2 className="h-4 w-4" />

@@ -1,20 +1,21 @@
 import React from 'react'
 import { motion } from "framer-motion"
-import { products } from '@/mocks/api/products'
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Product } from '@/types/products';
 
 
 interface ProductListType {
     filteredAndSortedProducts: any[]
     viewMode: "grid" | "list";
-    handleAddToCart: (product: typeof products[0]) => void
+    handleAddToCart: (product: Product) => void
+    productLength: number
 }
 
-const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, viewMode, handleAddToCart }) => {
+const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, viewMode, handleAddToCart, productLength }) => {
     return (
         <>
             <motion.div
@@ -24,7 +25,7 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
                 className="mb-6"
             >
                 <p className="text-stone-600">
-                    Showing {filteredAndSortedProducts.length} of {products.length} products
+                    Showing {filteredAndSortedProducts.length} of {productLength} products
                 </p>
             </motion.div>
 
@@ -40,7 +41,7 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
             >
                 {filteredAndSortedProducts.map((product, index) => (
                     <motion.div
-                        key={product.id}
+                        key={product._id}
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -48,9 +49,9 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
                         {viewMode === "grid" ? (
                             <Card className="group cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                                 <div className="relative overflow-hidden">
-                                    <Link href={`/products/${product.id}`}>
+                                    <Link href={`/products/${product._id}`}>
                                         <Image
-                                            src={product.image || "/placeholder.svg"}
+                                            src={product?.images[0] || "/placeholder.svg"}
                                             alt={product.name}
                                             width={400}
                                             height={400}
@@ -75,7 +76,7 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
                                     <Badge variant="secondary" className="mb-2 bg-stone-100 text-stone-700">
                                         {product.category}
                                     </Badge>
-                                    <Link href={`/products/${product.id}`}>
+                                    <Link href={`/products/${product._id}`}>
                                         <h3 className="text-xl font-semibold text-stone-800 mb-2 hover:text-amber-700 transition-colors">
                                             {product.name}
                                         </h3>
@@ -85,7 +86,10 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
                                     </p>
                                     <div className="flex items-center justify-between">
                                         <p className="text-2xl font-bold text-amber-700">
-                                            ${product.price}
+                                            {product.price.toLocaleString("en-IN", {
+                                                style: "currency",
+                                                currency: "INR"
+                                            })}
                                         </p>
                                         <div className="flex items-center gap-1 text-sm text-stone-500">
                                             <span>★</span>
@@ -125,7 +129,10 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-4">
                                                     <p className="text-2xl font-bold text-amber-700">
-                                                        ${product.price}
+                                                        {product.price.toLocaleString("en-IN", {
+                                                            style: "currency",
+                                                            currency: "INR"
+                                                        })}
                                                     </p>
                                                     <div className="flex items-center gap-1 text-sm text-stone-500">
                                                         <span>★</span>
@@ -146,7 +153,8 @@ const ProductList: React.FC<ProductListType> = ({ filteredAndSortedProducts, vie
                             </Card>
                         )}
                     </motion.div>
-                ))}
+                )
+                )}
             </motion.div>
         </>
 

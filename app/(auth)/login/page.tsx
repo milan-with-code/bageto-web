@@ -52,7 +52,7 @@ export default function LoginPage() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
     >
-      <Card className="shadow-xl">
+      <Card className="mx-4 sm:mx-0">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-serif font-bold text-stone-800">
             Welcome Back

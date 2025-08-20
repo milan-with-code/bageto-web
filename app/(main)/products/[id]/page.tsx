@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -12,28 +12,53 @@ import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
-import { product, reviews } from "@/mocks/api/products"
+import { useProductStore } from "@/store/useProductStore"
+import ProductDetailSkeleton from "@/features/products/ProductDetailSkeleton"
+import { useCartStore } from "@/store/useCartStore"
+import { useAuth } from "@/contexts/auth-context"
 
-export default function ProductDetailPage() {
+
+
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const { user } = useAuth()
   const [selectedImage, setSelectedImage] = useState(0)
-  const [selectedColor, setSelectedColor] = useState(product.colors[0])
-  const [selectedSize, setSelectedSize] = useState(product.sizes[0])
+  const [selectedColor, setSelectedColor] = useState<string>("")
+  const [selectedSize, setSelectedSize] = useState<string>("")
   const [quantity, setQuantity] = useState(1)
   const [isZoomed, setIsZoomed] = useState(false)
   const { addItem } = useCart()
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites()
+  const { fetchProductDetails, product, isLoading } = useProductStore();
+  const { addToCart } = useCartStore()
+
+  useEffect(() => {
+    fetchProductDetails(id)
+  }, [fetchProductDetails, id])
+
+  useEffect(() => {
+    if (product) {
+      setSelectedColor(product.colors[0] || "")
+      setSelectedSize(product.sizes[0] || "")
+      setSelectedImage(0)
+    }
+  }, [product])
 
   const handleAddToCart = () => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
+    if (!product) return;
+    const addItemCart = {
+      userId: user?._id ?? "",
+      productId: product._id,
+      name: product?.name,
+      price: product?.price,
       image: product.images[0],
       category: product.category,
       color: selectedColor,
       size: selectedSize,
       quantity
-    })
+    }
+    addToCart(addItemCart)
+
   }
 
   const incrementQuantity = () => setQuantity(prev => prev + 1)
@@ -54,6 +79,8 @@ export default function ProductDetailPage() {
     }
   }
 
+  if (isLoading) return <ProductDetailSkeleton />
+
   return (
     <div className="min-h-screen bg-cream-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -69,7 +96,7 @@ export default function ProductDetailPage() {
             <span>/</span>
             <Link href="/products" className="hover:text-amber-600 transition-colors">Products</Link>
             <span>/</span>
-            <span className="text-stone-800">{product.name}</span>
+            <span className="text-stone-800">{product?.name}</span>
           </div>
         </motion.nav>
 
@@ -84,8 +111,8 @@ export default function ProductDetailPage() {
             {/* Main Image */}
             <div className="relative aspect-square overflow-hidden rounded-lg bg-white shadow-lg">
               <Image
-                src={product.images[selectedImage] || "/placeholder.svg"}
-                alt={product.name}
+                src={product?.images[selectedImage] || "/placeholder.svg"}
+                alt={product?.name ?? "Product image"}
                 fill
                 className={`object-cover transition-transform duration-300 ${isZoomed ? "scale-150" : "scale-100"
                   }`}
@@ -103,7 +130,7 @@ export default function ProductDetailPage() {
 
             {/* Thumbnail Images */}
             <div className="grid grid-cols-4 gap-4">
-              {product.images.map((image, index) => (
+              {product?.images.map((image, index) => (
                 <motion.button
                   key={index}
                   whileHover={{ scale: 1.05 }}
@@ -114,7 +141,7 @@ export default function ProductDetailPage() {
                 >
                   <Image
                     src={image || "/placeholder.svg"}
-                    alt={`${product.name} view ${index + 1}`}
+                    alt={`${product?.name} view ${index + 1}`}
                     width={150}
                     height={150}
                     className="w-full h-full object-cover"
@@ -134,10 +161,10 @@ export default function ProductDetailPage() {
             {/* Header */}
             <div>
               <Badge variant="secondary" className="mb-2 bg-stone-100 text-stone-700">
-                {product.category}
+                {product?.category}
               </Badge>
               <h1 className="text-3xl lg:text-4xl font-serif font-bold text-stone-800 mb-4">
-                {product.name}
+                {product?.name}
               </h1>
 
               {/* Rating */}
@@ -146,7 +173,7 @@ export default function ProductDetailPage() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 ${i < Math.floor(product.rating)
+                      className={`h-5 w-5 ${i < Math.floor(product?.rating ?? 0)
                         ? "fill-amber-400 text-amber-400"
                         : "text-stone-300"
                         }`}
@@ -154,23 +181,34 @@ export default function ProductDetailPage() {
                   ))}
                 </div>
                 <span className="text-sm text-stone-600">
-                  {product.rating} ({product.reviews} reviews)
+                  {product?.rating} ({product?.reviews}reviews)
                 </span>
               </div>
 
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
                 <span className="text-3xl font-bold text-amber-700">
-                  ${product.price}
+                  {product?.price.toLocaleString("en-IN", {
+                    style: "currency",
+                    currency: "INR"
+                  })}
                 </span>
-                {product.originalPrice && (
+                {product?.originalPrice && (
                   <span className="text-xl text-stone-500 line-through">
-                    ${product.originalPrice}
+                    {product?.originalPrice.toLocaleString("en-IN", {
+                      style: "currency",
+                      currency: "INR"
+                    })}
                   </span>
                 )}
-                {product.originalPrice && (
+                {product?.originalPrice && (
                   <Badge variant="destructive" className="bg-red-100 text-red-700">
-                    Save ${product.originalPrice - product.price}
+                    Save {(product && product.originalPrice && product.price
+                      ? (product.originalPrice - product.price).toLocaleString("en-IN", {
+                        style: "currency",
+                        currency: "INR"
+                      })
+                      : "")}
                   </Badge>
                 )}
               </div>
@@ -178,7 +216,7 @@ export default function ProductDetailPage() {
 
             {/* Description */}
             <p className="text-stone-600 leading-relaxed">
-              {product.description}
+              {product?.description}
             </p>
 
             {/* Options */}
@@ -189,7 +227,7 @@ export default function ProductDetailPage() {
                   Color: {selectedColor}
                 </label>
                 <div className="flex gap-2">
-                  {product.colors.map((color) => (
+                  {product?.colors.map((color) => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
@@ -216,7 +254,7 @@ export default function ProductDetailPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {product.sizes.map((size) => (
+                    {product?.sizes.map((size) => (
                       <SelectItem key={size} value={size}>
                         {size}
                       </SelectItem>
@@ -257,9 +295,9 @@ export default function ProductDetailPage() {
                 <Button
                   onClick={handleAddToCart}
                   className="flex-1 bg-amber-700 hover:bg-amber-800 text-white py-3 text-lg font-semibold"
-                  disabled={!product.inStock}
+                  disabled={!product?.inStock}
                 >
-                  {product.inStock ? "Add to Cart" : "Out of Stock"}
+                  {product?.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
                 <Button onClick={() => handleToggleFavorite(product)} variant="outline" size="icon" className="p-3">
                   <Heart className="h-5 w-5" />
@@ -310,7 +348,7 @@ export default function ProductDetailPage() {
             <TabsList className="grid w-full grid-cols-3 lg:w-96">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews ({product.reviews})</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews ({product?.reviews.length ? product?.reviews : 0})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="description" className="mt-8">
@@ -321,11 +359,11 @@ export default function ProductDetailPage() {
                   </h3>
                   <div className="prose prose-stone max-w-none">
                     <p className="text-stone-600 leading-relaxed mb-6">
-                      {product.description}
+                      {product?.description}
                     </p>
                     <h4 className="text-lg font-semibold text-stone-800 mb-4">Key Features:</h4>
                     <ul className="space-y-2">
-                      {product.features.map((feature, index) => (
+                      {product?.features.map((feature, index) => (
                         <li key={index} className="flex items-start gap-3 text-stone-600">
                           <span className="w-2 h-2 bg-amber-600 rounded-full mt-2 flex-shrink-0" />
                           {feature}
@@ -344,7 +382,7 @@ export default function ProductDetailPage() {
                     Specifications
                   </h3>
                   <div className="grid md:grid-cols-2 gap-6">
-                    {Object.entries(product.specifications).map(([key, value]) => (
+                    {Object.entries(product?.specifications ?? {}).map(([key, value]) => (
                       <div key={key} className="flex justify-between py-3 border-b border-stone-200">
                         <span className="font-medium text-stone-700 capitalize">
                           {key.replace(/([A-Z])/g, ' $1').trim()}:
@@ -373,13 +411,13 @@ export default function ProductDetailPage() {
                   <div className="flex items-center gap-8 mb-8 p-6 bg-stone-50 rounded-lg">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-amber-700 mb-2">
-                        {product.rating}
+                        {product?.rating}
                       </div>
                       <div className="flex items-center gap-1 mb-2">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-4 w-4 ${i < Math.floor(product.rating)
+                            className={`h-4 w-4 ${i < Math.floor(product?.rating ?? 0)
                               ? "fill-amber-400 text-amber-400"
                               : "text-stone-300"
                               }`}
@@ -387,14 +425,14 @@ export default function ProductDetailPage() {
                         ))}
                       </div>
                       <div className="text-sm text-stone-600">
-                        Based on {product.reviews} reviews
+                        Based on {product?.reviews} reviews
                       </div>
                     </div>
                   </div>
 
                   {/* Individual Reviews */}
                   <div className="space-y-6">
-                    {reviews.map((review) => (
+                    {product?.reviews.map((review) => (
                       <div key={review.id} className="border-b border-stone-200 pb-6">
                         <div className="flex items-start justify-between mb-3">
                           <div>
