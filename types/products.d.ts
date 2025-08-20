@@ -1,19 +1,28 @@
-export interface Product {
-    id: number;
+export type Specification = {
+    dimensions: string;
+    weight: string;
+    material: string;
+    lining: string;
+    hardware: string;
+    closure: string;
+};
+
+export type Product = {
+    _id: string;
     name: string;
     price: number;
-    originalPrice?: number;
+    originalPrice: number;
     images: string[];
     category: string;
     description: string;
     features: string[];
-    specifications: ProductSpecification;
+    specifications: Specification;
     rating: number;
-    reviews: number;
+    reviews: any[];
     inStock: boolean;
     colors: string[];
     sizes: string[];
-}
+};
 
 export interface AllProduct {
     id: number;
@@ -39,7 +48,7 @@ export interface ProductReview {
 }
 
 export type ProductsTypes = {
-    id: number;
+    _id: string;
     name: string;
     price: number;
     image: string;

@@ -3,21 +3,20 @@
 import { useState, useMemo, useCallback, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/contexts/cart-context"
-import { products } from "@/mocks/api/products"
 import ProductFiltersBar from "@/features/products/ProductFiltersBar"
 import ProductList from "@/features/products/ProductList"
 import ProductListSkeleton from "@/features/products/ProductListSkeleton"
 import { useProductStore } from "@/store/useProductStore"
+import { Product } from "@/types/products"
+import { useCartStore } from "@/store/useCartStore"
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [sortBy, setSortBy] = useState("featured")
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const { addItem } = useCart()
-  const isLoading = false
-  const { fetchProducts } = useProductStore()
+  const { fetchProducts, products, isLoading } = useProductStore();
+  const { addToCart } = useCartStore()
 
   useEffect(() => {
     fetchProducts()
@@ -48,25 +47,27 @@ export default function ProductsPage() {
         filtered.sort((a, b) => b.rating - a.rating)
         break
       case "newest":
-        filtered.sort((a, b) => b.id - a.id)
+        filtered.sort((a, b) => Number(b._id) - Number(a._id))
         break
       default:
         break
     }
-
     return filtered
-  }, [selectedCategory, sortBy, searchQuery])
+  }, [selectedCategory, sortBy, searchQuery, products])
 
 
-  const handleAddToCart = useCallback((product: typeof products[0]) => {
-    addItem({
-      id: product.id,
+
+  const handleAddToCart = useCallback((product: Product) => {
+    addToCart({
+      productId: product._id,
       name: product.name,
       price: product.price,
-      image: product.image,
-      category: product.category
+      image: product.images[0],
+      category: product.category,
+      quantity: 1,
     })
   }, [])
+
 
   return (
     <div className="min-h-screen bg-cream-50 pt-20">
@@ -95,18 +96,16 @@ export default function ProductsPage() {
           sortBy={sortBy}
           viewMode={viewMode}
         />
-
         {
-          isLoading ?
-            <ProductListSkeleton viewMode={viewMode} count={viewMode === "grid" ? 9 : 6} /> :
+          isLoading ? <ProductListSkeleton viewMode={viewMode} count={viewMode === "grid" ? 3 : 3} /> :
 
             <ProductList
               filteredAndSortedProducts={filteredAndSortedProducts}
               handleAddToCart={handleAddToCart}
               viewMode={viewMode}
+              productLength={products.length}
             />
         }
-
 
         {filteredAndSortedProducts.length === 0 && (
           <motion.div

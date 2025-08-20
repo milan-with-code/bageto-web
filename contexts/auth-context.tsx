@@ -5,11 +5,12 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 
 interface User {
   email: string
-  name: string
+  name: string,
+  _id: string
 }
 
 interface AuthContextType {
-  user: User | null
+  user: User | null;
   login: (email: string, password: string) => Promise<void>
   register: (email: string, password: string, name: string) => Promise<void>
   logout: () => void
@@ -19,8 +20,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const { loginUser, loading, fetchUser, } = useAuthStore()
+  const { loginUser, loading, fetchUser, user, logoutUser } = useAuthStore();
+
 
   useEffect(() => {
     fetchUser()
@@ -38,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = () => {
-    setUser(null)
+    logoutUser()
   }
 
   return (

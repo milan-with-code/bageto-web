@@ -6,6 +6,12 @@ interface UserDetails {
     password: string
 }
 
+interface User {
+    _id: string
+    name: string
+    email: string
+}
+
 interface RegisterType {
     name: string
     email: string
@@ -15,7 +21,7 @@ interface RegisterType {
 }
 
 interface AuthState {
-    user: []
+    user: User | null
     loading: boolean
     error: string | null,
     loginUser: (credentials: UserDetails) => Promise<void>
@@ -27,7 +33,7 @@ interface AuthState {
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export const useAuthStore = create<AuthState>((set, get) => ({
-    user: [],
+    user: null,
     loading: false,
     error: null,
 
@@ -75,7 +81,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                 method: "POST",
                 credentials: "include",
             });
-            set({ user: [], loading: false, error: null });
+            set({ user: null, loading: false, error: null });
         } catch (error: any) {
             set({ loading: false, error: error.message });
         }
@@ -88,8 +94,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                 credentials: "include",
             });
             const data = await res.json()
-            console.log('data :>> ', data);
-            set({ user: data, loading: false, error: null });
+            set({ user: data?.user, loading: false, error: null });
         } catch (error: any) {
             set({ loading: false, error: error.message });
 

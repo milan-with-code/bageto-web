@@ -11,6 +11,7 @@ import { ShoppingBag, Menu, Search, Heart, User } from 'lucide-react'
 import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
 import SearchModal from "./search-modal"
+import { useCartStore } from "@/store/useCartStore"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -25,9 +26,9 @@ export default function Navigation() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const pathname = usePathname()
   const { favorites } = useFavorites()
-  const { items } = useCart()
+  const { cart } = useCartStore();
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,7 +115,7 @@ export default function Navigation() {
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                <Link href="/auth/login">
+                <Link href="/login">
                   <Button variant="ghost" size="icon">
                     <User className="h-5 w-5" />
                   </Button>
@@ -197,7 +198,7 @@ export default function Navigation() {
                           )}
                         </Button>
                       </Link>
-                      <Link href="/auth/login">
+                      <Link href="/login">
                         <Button variant="ghost" size="icon">
                           <User className="h-5 w-5" />
                         </Button>
