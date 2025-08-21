@@ -15,7 +15,7 @@ import { useAuth } from "@/contexts/auth-context"
 
 export default function CartPage() {
   const { user } = useAuth()
-  const { items, total, updateQuantity, removeItem, clearCart } = useCart()
+  const { items, total, updateQuantity, clearCart } = useCart()
   const { fetchCartItems, cart, removeFromCart } = useCartStore();
 
   useEffect(() => {

@@ -16,13 +16,11 @@ import { useCart } from "@/contexts/cart-context";
 import { Product } from "@/types/products";
 import { useProductStore } from "@/store/useProductStore";
 import { ProductCardSkeleton } from "@/features/products/ProductCardSkeleton";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function ProductShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { addItem } = useCart();
   const { products, fetchProducts, isLoading } = useProductStore();
-  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (!products.length) {

@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Star, Heart, Share2, Truck, Shield, RotateCcw, Plus, Minus, ZoomIn } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
-import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
 import { useProductStore } from "@/store/useProductStore"
 import ProductDetailSkeleton from "@/features/products/ProductDetailSkeleton"
@@ -27,7 +26,6 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const [selectedSize, setSelectedSize] = useState<string>("")
   const [quantity, setQuantity] = useState(1)
   const [isZoomed, setIsZoomed] = useState(false)
-  const { addItem } = useCart()
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites()
   const { fetchProductDetails, product, isLoading } = useProductStore();
   const { addToCart } = useCartStore()
