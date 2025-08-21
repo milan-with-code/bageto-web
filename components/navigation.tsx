@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { ShoppingBag, Menu, Search, Heart, User } from 'lucide-react'
-import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
 import SearchModal from "./search-modal"
 import { useCartStore } from "@/store/useCartStore"
