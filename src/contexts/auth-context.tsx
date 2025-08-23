@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuthStore } from "@/store/useAuthStore"
-import { createContext, useContext, useState, ReactNode, useEffect } from "react"
+import { createContext, useContext, ReactNode, useEffect } from "react"
 
 interface User {
   email: string
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (email: string, password: string,) => {
     console.log('email,password :>> ', email, password);
   }
 

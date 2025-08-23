@@ -23,7 +23,7 @@ interface CartState {
     clearCart: () => Promise<void>;
 }
 
-let URL = process.env.NEXT_PUBLIC_BACKEND_URL
+const URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
 export const useCartStore = create<CartState>((set, get) => ({
     cart: [],
