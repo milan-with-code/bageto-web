@@ -21,14 +21,16 @@ const footerLinks = {
   support: [
     { name: "Contact Us", href: "/contact" },
     { name: "Size Guide", href: "/size-guide" },
-    { name: "Care Instructions", href: "/care" },
+    {
+      name: "Care Instructions", href: "/care-instructions"
+    },
     { name: "Returns", href: "/returns" },
   ],
   legal: [
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Service", href: "/terms" },
-    { name: "Shipping Policy", href: "/shipping" },
-    { name: "Cookie Policy", href: "/cookies" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms of Service", href: "/terms-of-service" },
+    { name: "Shipping Policy", href: "/shipping-policy" },
+    { name: "Cookie Policy", href: "/cookie-policy" },
   ],
 }
 
@@ -42,10 +44,8 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className="bg-leather-dark text-white">
-      {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
-          {/* Brand Section */}
           <div className="lg:col-span-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

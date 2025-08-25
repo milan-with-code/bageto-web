@@ -1,5 +1,6 @@
 "use client"
 
+import CategorySections from "@/components/sections/category-sections"
 import FeatureHighlights from "@/components/sections/feature-highlights"
 import HeroSection from "@/components/sections/hero-section"
 import NewsletterSection from "@/components/sections/newsletter-section"
@@ -29,6 +30,7 @@ export default function HomePage() {
       transition={pageTransition}
     >
       <HeroSection />
+      <CategorySections />
       <ProductShowcase />
       <FeatureHighlights />
       <TestimonialsSection />
