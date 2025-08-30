@@ -15,11 +15,13 @@ export function middleware(request: NextRequest) {
     }
 
     const isProtected =
-        protectedRoutes.some((route) => pathname.startsWith(route));
+        pathname === "/" ||
+        protectedRoutes.some((route) => route !== "/" && pathname.startsWith(route));
+
+
     if (isProtected && !token) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
-
     return NextResponse.next();
 }
 
