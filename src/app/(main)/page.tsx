@@ -3,8 +3,8 @@
 import CategorySections from "@/components/sections/category-sections"
 import FeatureHighlights from "@/components/sections/feature-highlights"
 import HeroSection from "@/components/sections/hero-section"
+import NewArrivals from "@/components/sections/new-arrivals"
 import NewsletterSection from "@/components/sections/newsletter-section"
-import ProductShowcase from "@/components/sections/product-showcase"
 import TestimonialsSection from "@/components/sections/testimonials-section"
 import { motion, Transition } from "framer-motion"
 
@@ -31,7 +31,8 @@ export default function HomePage() {
     >
       <HeroSection />
       <CategorySections />
-      <ProductShowcase />
+      <NewArrivals />
+      {/* <ProductShowcase /> */}
       <FeatureHighlights />
       <TestimonialsSection />
       <NewsletterSection />

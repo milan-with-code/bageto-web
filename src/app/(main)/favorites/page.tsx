@@ -9,17 +9,24 @@ import Image from "next/image"
 import Link from "next/link"
 import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
+import { useFavorite } from "@/store/useFavorite"
+import { useEffect } from "react"
 
 export default function FavoritesPage() {
-    const { favorites, removeFromFavorites, clearFavorites } = useFavorites()
+    const { removeFromFavorites, clearFavorites } = useFavorites()
     const { addItem } = useCart()
+    const { getFavorites, favorites } = useFavorite();
+
+    useEffect(() => {
+        getFavorites();
+    }, [getFavorites])
 
     const handleAddToCart = (product: (typeof favorites)[0]) => {
         addItem({
-            id: product.id,
+            id: product._id,
             name: product.name,
             price: product.price,
-            image: product.image,
+            image: product.images[0],
             category: product.category,
             quantity: 1,
         })
@@ -82,16 +89,16 @@ export default function FavoritesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {favorites.map((product, index) => (
                         <motion.div
-                            key={product.id}
+                            key={product._id}
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                         >
                             <Card className="group cursor-pointer overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                                 <div className="relative overflow-hidden">
-                                    <Link href={`/products/${product.id}`}>
+                                    <Link href={`/products/${product._id}`}>
                                         <Image
-                                            src={product.image || "/placeholder.svg"}
+                                            src={product.images[0] || "/placeholder.svg"}
                                             alt={product.name}
                                             width={400}
                                             height={400}
@@ -103,7 +110,7 @@ export default function FavoritesPage() {
                                     <motion.button
                                         whileHover={{ scale: 1.1 }}
                                         whileTap={{ scale: 0.9 }}
-                                        onClick={() => removeFromFavorites(product.id)}
+                                        onClick={() => removeFromFavorites(product._id)}
                                         className="absolute top-4 right-4 p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors"
                                     >
                                         <Heart className="h-4 w-4 fill-current" />
@@ -130,7 +137,7 @@ export default function FavoritesPage() {
                                         {product.category}
                                     </Badge>
 
-                                    <Link href={`/products/${product.id}`}>
+                                    <Link href={`/products/${product._id}`}>
                                         <h3 className="text-lg font-semibold text-stone-800 mb-2 hover:text-amber-700 transition-colors line-clamp-2">
                                             {product.name}
                                         </h3>
@@ -141,7 +148,7 @@ export default function FavoritesPage() {
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            onClick={() => removeFromFavorites(product.id)}
+                                            onClick={() => removeFromFavorites(product._id)}
                                             className="text-red-500 hover:text-red-600 p-1"
                                         >
                                             <Trash2 className="h-4 w-4" />

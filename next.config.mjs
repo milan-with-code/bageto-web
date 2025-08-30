@@ -10,6 +10,14 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://bageto-backend.onrender.com/api/:path*",
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+export default nextConfig; // ✅ correct for .mjs

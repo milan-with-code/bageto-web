@@ -67,8 +67,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
             set({ error: null, loading: false })
 
-        } catch (error: any) {
-            set({ error: error.message || "Something went wrong", loading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", loading: false })
         }
     },
 
@@ -80,8 +80,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
                 credentials: "include",
             });
             set({ user: null, loading: false, error: null });
-        } catch (error: any) {
-            set({ loading: false, error: error.message });
+        } catch (error) {
+            set({ loading: false, error: (error as Error).message });
         }
     },
 
@@ -93,8 +93,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             });
             const data = await res.json()
             set({ user: data?.user, loading: false, error: null });
-        } catch (error: any) {
-            set({ loading: false, error: error.message });
+        } catch (error) {
+            set({ loading: false, error: (error as Error).message });
 
         }
     },
@@ -111,8 +111,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             })
             const data = await res.json();
             set({ user: data, loading: false, error: null })
-        } catch (error: any) {
-            set({ loading: false, error: error.message })
+        } catch (error) {
+            set({ loading: false, error: (error as Error).message })
         }
     }
 

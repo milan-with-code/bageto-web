@@ -46,8 +46,8 @@ export const useCartStore = create<CartState>((set, get) => ({
             if (!response.ok) throw new Error(data.message || "Failed to add item to cart");
 
             set({ cart: data?.cart?.items, error: null, isLoading: false })
-        } catch (error: any) {
-            set({ error: error.message || "Something went wrong", isLoading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false })
         }
     },
     removeFromCart: async (id) => {
@@ -58,10 +58,9 @@ export const useCartStore = create<CartState>((set, get) => ({
             })
             const data = await response.json();
             if (!response.ok) throw new Error(data.message || "Failed to remove item from cart");
-            console.log('data :>> ', data);
             set({ cart: data?.cart?.items, error: null, isLoading: false })
-        } catch (error: any) {
-            set({ error: error.message || "Failed to remove item from cart", isLoading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Failed to remove item from cart", isLoading: false })
         }
     },
     fetchCartItems: async (userId: string) => {
@@ -75,8 +74,8 @@ export const useCartStore = create<CartState>((set, get) => ({
 
             const data = await response.json();
             set({ cart: data.items, isLoading: false });
-        } catch (error: any) {
-            set({ error: error.message || "Failed to fetch cart items", isLoading: false });
+        } catch (error) {
+            set({ error: (error as Error).message || "Failed to fetch cart items", isLoading: false });
         }
     },
 

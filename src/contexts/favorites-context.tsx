@@ -22,7 +22,7 @@ type FavoritesAction =
 const FavoritesContext = createContext<{
     favorites: FavoriteItem[]
     addToFavorites: (item: FavoriteItem) => void
-    removeFromFavorites: (id: number) => void
+    removeFromFavorites: (id: string) => void
     clearFavorites: () => void
     isFavorite: (id: number) => boolean
 } | null>(null)

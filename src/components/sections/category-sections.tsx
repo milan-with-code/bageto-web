@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { categories } from "@/mocks/api/categories";
 import Image from "next/image";
-import { motion } from "framer-motion";
 
 const CategorySections = () => {
     return (
