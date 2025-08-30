@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Star, Heart, Share2, Truck, Shield, RotateCcw, Plus, Minus, ZoomIn } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
-import { useFavorites } from "@/contexts/favorites-context"
 import { useProductStore } from "@/store/useProductStore"
 import ProductDetailSkeleton from "@/features/products/ProductDetailSkeleton"
 import { useCartStore } from "@/store/useCartStore"

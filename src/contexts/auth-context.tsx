@@ -1,58 +1,56 @@
-"use client"
+"use client";
 
-import { useAuthStore } from "@/store/useAuthStore"
-import { createContext, useContext, ReactNode, useEffect } from "react"
+import { useAuthStore } from "@/store/useAuthStore";
+import { createContext, useContext, ReactNode, useEffect } from "react";
 
 interface User {
-  email: string
-  name: string,
-  _id: string
+  email: string;
+  name: string;
+  _id: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, name: string) => Promise<void>
-  logout: () => void
-  isLoading: boolean
+  login: (email: string, password: string) => Promise<{ success: boolean }>;
+  register: (email: string, password: string, name: string) => Promise<void>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const { loginUser, loading, fetchUser, user, logoutUser } = useAuthStore();
-
+  const { loginUser, loading, fetchUser, user, logoutUser, registerUser } = useAuthStore();
 
   useEffect(() => {
-    fetchUser()
+    fetchUser();
   }, [fetchUser]);
 
   const login = async (email: string, password: string) => {
-    await loginUser({
-      email,
-      password
-    })
-  }
+    return await loginUser({ email, password });
+  };
 
-  const register = async (email: string, password: string,) => {
-    console.log('email,password :>> ', email, password);
-  }
+  const register = async (email: string, password: string, name: string) => {
+    await registerUser({ email, password, name, confirmPassword: password });
+  };
 
-  const logout = () => {
-    logoutUser()
-  }
+  const logout = async () => {
+    await logoutUser();
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading: loading }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, isLoading: loading }}
+    >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context
+  return context;
 }

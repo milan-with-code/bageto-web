@@ -7,17 +7,15 @@ const publicRoutes = ["/login", "/register", "/forgot-password"];
 export function middleware(request: NextRequest) {
 
     const { pathname } = request.nextUrl;
-
     const token = request.cookies.get("token")?.value;
+
+
     if (publicRoutes.includes(pathname) && token) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 
     const isProtected =
-        pathname === "/" ||
-        protectedRoutes.some((route) => route !== "/" && pathname.startsWith(route));
-
-
+        protectedRoutes.some((route) => pathname.startsWith(route));
     if (isProtected && !token) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -26,5 +24,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/((?!_next|api|favicon.ico).*)"],
+    matcher: [
+        "/((?!_next|api|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|css|js)).*)",
+    ],
 };
