@@ -53,8 +53,8 @@ export default function ForgotPasswordPage() {
 
             setIsSubmitted(true)
             setEmail("") // Clear email input on success
-        } catch (err: any) {
-            setError(err.message || "An unexpected error occurred. Please try again.")
+        } catch (err) {
+            setError((err as Error).message || "An unexpected error occurred. Please try again.")
         } finally {
             setIsLoading(false)
         }

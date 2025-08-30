@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { ShoppingBag, Menu, Search, Heart, User } from 'lucide-react'
-import { useFavorites } from "@/contexts/favorites-context"
 import SearchModal from "./search-modal"
 import { useCartStore } from "@/store/useCartStore"
+import { useFavorite } from "@/store/useFavorite"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -24,8 +24,8 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const pathname = usePathname()
-  const { favorites } = useFavorites()
   const { cart } = useCartStore();
+  const { favorites } = useFavorite()
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
 

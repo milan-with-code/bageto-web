@@ -12,6 +12,8 @@ interface ProductState {
     fetchProductDetails: (id: string) => Promise<void>
     deleteProduct: (id: string) => Promise<void>;
     editProduct: (id: string, updatedData: Partial<ProductsTypes>) => Promise<void>;
+    fetchNewArrivals: () => Promise<void>;
+    fetchBestSellers: () => Promise<void>;
 }
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL
@@ -31,8 +33,8 @@ export const useProductStore = create<ProductState>((set, get) => ({
                 products: data?.data || []
                 , isLoading: false
             })
-        } catch (error: any) {
-            set({ error: error.message || "Something went wrong", isLoading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false })
         }
     },
 
@@ -49,8 +51,8 @@ export const useProductStore = create<ProductState>((set, get) => ({
             const res = await fetch(`${URL}/api/products/${id}`)
             const data = await res.json();
             set({ product: data, isLoading: false })
-        } catch (error: any) {
-            set({ error: error.message || "Something went wrong", isLoading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false })
         }
     },
 
@@ -65,8 +67,8 @@ export const useProductStore = create<ProductState>((set, get) => ({
                 isLoading: false
             })
 
-        } catch (error: any) {
-            set({ error: error.message || "Something went wrong", isLoading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false })
         }
     },
 
@@ -83,8 +85,30 @@ export const useProductStore = create<ProductState>((set, get) => ({
             const data = await res.json();
             const editProductData = get().products.map((item) => item._id === id ? { ...item, ...data } : item)
             set({ products: editProductData, isLoading: false })
-        } catch (error: any) {
-            set({ error: error.message || "Something went wrong", isLoading: false })
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false })
+        }
+    },
+
+    fetchNewArrivals: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const res = await fetch(`${URL}/api/products/new-arrivals`);
+            const data = await res.json();
+            set({ products: data?.data || [], isLoading: false });
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false });
+        }
+    },
+
+    fetchBestSellers: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const res = await fetch(`${URL}/api/products/best-sellers`);
+            const data = await res.json();
+            set({ products: data?.data || [], isLoading: false });
+        } catch (error) {
+            set({ error: (error as Error).message || "Something went wrong", isLoading: false });
         }
     }
 

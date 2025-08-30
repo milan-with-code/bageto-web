@@ -15,6 +15,7 @@ import { useProductStore } from "@/store/useProductStore"
 import ProductDetailSkeleton from "@/features/products/ProductDetailSkeleton"
 import { useCartStore } from "@/store/useCartStore"
 import { useAuth } from "@/contexts/auth-context"
+import { useFavorite } from "@/store/useFavorite"
 
 
 
@@ -26,9 +27,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const [selectedSize, setSelectedSize] = useState<string>("")
   const [quantity, setQuantity] = useState(1)
   const [isZoomed, setIsZoomed] = useState(false)
-  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites()
   const { fetchProductDetails, product, isLoading } = useProductStore();
   const { addToCart } = useCartStore()
+  const { addFavorite, isFavorite } = useFavorite()
 
   useEffect(() => {
     fetchProductDetails(id)
@@ -64,17 +65,24 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
 
 
   const handleToggleFavorite = (product: any) => {
-    if (isFavorite(product.id)) {
-      removeFromFavorites(product.id)
+    const productId = product._id;
+    if (isFavorite(productId)) {
+      console.log('Already isFavorite :>> ');
     } else {
-      addToFavorites({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.images[0],
-        category: product.category,
-      })
+      addFavorite(productId)
     }
+    // if (isFavorite(product.id)) {
+    //   removeFromFavorites(product.id)
+    // } else {
+    //   addToFavorites({
+    //     id: product.id,
+    //     name: product.name,
+    //     price: product.price,
+    //     image: product.images[0],
+    //     category: product.category,
+    //   })
+    // }
+
   }
 
   if (isLoading) return <ProductDetailSkeleton />
