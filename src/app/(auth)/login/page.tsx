@@ -11,6 +11,7 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/store/useAuthStore"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -18,6 +19,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({})
   const { isLoading, login, } = useAuth()
+  const { loginUser } = useAuthStore()
+  const router = useRouter()
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {}
@@ -41,7 +44,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!validateForm()) return
-    const result = await login(email, password)
+    const result = await loginUser({ email, password })
     if (result.success) {
       router.push("/dashboard");
     }
