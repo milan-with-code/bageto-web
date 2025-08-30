@@ -1,5 +1,4 @@
 import { toast } from "@/hooks/use-toast";
-import { useRouter } from "next/router";
 import { create } from "zustand";
 
 interface UserDetails {
@@ -25,7 +24,7 @@ interface AuthState {
     user: User | null
     loading: boolean
     error: string | null,
-    loginUser: (credentials: UserDetails) => Promise<void>
+    loginUser: (credentials: UserDetails) => Promise<{ success: boolean }>;
     logoutUser: () => Promise<void>;
     fetchUser: () => Promise<void>;
     registerUser: (credentials: RegisterType) => Promise<void>
@@ -33,95 +32,91 @@ interface AuthState {
 
 const URL = process.env.NEXT_PUBLIC_BACKEND_URL
 
-export const useAuthStore = create<AuthState>((set, get) => {
-    const router = useRouter();
-    return ({
-        user: null,
-        loading: false,
-        error: null,
+export const useAuthStore = create<AuthState>((set, get) => ({
+    user: null,
+    loading: false,
+    error: null,
 
-        loginUser: async (credentials: UserDetails) => {
-            set({ error: null, loading: true })
-            try {
-                const res = await fetch(`${URL}/api/users/login`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(credentials)
+    loginUser: async (credentials) => {
+        set({ error: null, loading: true });
+        try {
+            const res = await fetch(`${URL}/api/users/login`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(credentials),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                set({ error: data.error || "Login failed", loading: false });
+                toast({
+                    title: "Login Failed",
+                    description: data.error || "Invalid credentials",
                 });
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    set({ error: data.error || "Login failed", loading: false });
-                    toast({
-                        title: "Login Failed",
-                        description: data.error || "Invalid credentials",
-                    });
-                    return;
-                }
-
-                if (data.status === 200) {
-                    toast({
-                        title: "Login Successful",
-                        description: "Welcome back!",
-                    });
-
-                    set({ user: data.user, error: null, loading: false });
-
-                    router.push("/dashboard");
-                }
-
-
-            } catch (error) {
-                set({ error: (error as Error).message || "Something went wrong", loading: false })
+                return { success: false };
             }
-        },
 
-        logoutUser: async () => {
-            set({ error: null, loading: true })
-            try {
-                await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-                    method: "POST",
-                    credentials: "include",
-                });
-                set({ user: null, loading: false, error: null });
-            } catch (error) {
-                set({ loading: false, error: (error as Error).message });
-            }
-        },
+            toast({
+                title: "Login Successful",
+                description: "Welcome back!",
+            });
 
-        fetchUser: async () => {
-            set({ loading: true, error: null });
-            try {
-                const res = await fetch(`${URL}/api/users/me`, {
-                    credentials: "include",
-                });
-                const data = await res.json()
-                set({ user: data?.user, loading: false, error: null });
-            } catch (error) {
-                set({ loading: false, error: (error as Error).message });
-
-            }
-        },
-
-        registerUser: async (credentials: RegisterType) => {
-            set({ loading: true, error: null })
-            try {
-                const res = await fetch(`${URL}/api/users/register`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(credentials)
-                })
-                const data = await res.json();
-                set({ user: data, loading: false, error: null })
-            } catch (error) {
-                set({ loading: false, error: (error as Error).message })
-            }
+            set({ user: data.user, error: null, loading: false });
+            return { success: true };
+        } catch (error) {
+            set({
+                error: (error as Error).message || "Something went wrong",
+                loading: false,
+            });
+            return { success: false };
         }
+    },
 
-    })
-})
+    logoutUser: async () => {
+        set({ error: null, loading: true })
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+                method: "POST",
+                credentials: "include",
+            });
+            set({ user: null, loading: false, error: null });
+        } catch (error) {
+            set({ loading: false, error: (error as Error).message });
+        }
+    },
+
+    fetchUser: async () => {
+        set({ loading: true, error: null });
+        try {
+            const res = await fetch(`${URL}/api/users/me`, {
+                credentials: "include",
+            });
+            const data = await res.json()
+            set({ user: data?.user, loading: false, error: null });
+        } catch (error) {
+            set({ loading: false, error: (error as Error).message });
+
+        }
+    },
+
+    registerUser: async (credentials: RegisterType) => {
+        set({ loading: true, error: null })
+        try {
+            const res = await fetch(`${URL}/api/users/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(credentials)
+            })
+            const data = await res.json();
+            set({ user: data, loading: false, error: null })
+        } catch (error) {
+            set({ loading: false, error: (error as Error).message })
+        }
+    }
+
+}))
 
